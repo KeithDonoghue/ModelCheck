@@ -2,6 +2,8 @@
 using namespace std;
 
 
+
+
 state  recurse2(state x, int p)
 {
 int*  j = &program[x.instructions[p]];
@@ -179,6 +181,7 @@ switch (j){
 }
 
 
+
 thread_local  bool saturationmode;
 bool state::operator==(state const&x)
   {
@@ -195,6 +198,8 @@ bool state::operator==(state const&x)
     return j == 15;
   }
 
+
+//Greater then required for hash chain ordering
 bool state::operator>=(state const&x)
   {
     return instructions[0] + instructions[1] + instructions[2] + instructions[3] + instructions[4] + variables[0] + variables[1] + variables[2] + variables[3] + variables[4] + types[0] + types[1] + types[2] + types[3] + types[4] > x.variables[0] + x.variables[1] + x.variables[2] + x.variables[3] + x.variables[4] + x.instructions[0]+ x.instructions[1] + x.instructions[2] + x.instructions[3] + x.instructions[4] + x.types[0] + x.types[1] + x.types[2] + x.types[3] + x.types[4];
@@ -404,8 +409,14 @@ unsigned int DJBHash(const std::string& str)
 }
 /* End Of DJB Hash Function */
 
+hashtable::hashtable()
+{
 
-hashtable::hashtable(unsigned int size)
+  hsize = 0;
+  table = NULL;
+ 
+}
+void hashtable::init(unsigned int size)
 {
 
   hsize = size;
@@ -419,6 +430,7 @@ hashtable::hashtable(unsigned int size)
 
   bool hashtable::Find(DPointer<NodeType,8>* head, state key)
   {
+    cout << "hello:" ;
     state ckey;
   TryAgain: 
     prev1 = head;
@@ -435,6 +447,7 @@ hashtable::hashtable(unsigned int size)
 	  return false;
 
     }
+    cout << "hello:" <<  (P(cur.ptr))->nnext.ui;
 	next1 = (P(cur.ptr))->nnext;
 	//*hp0 = next;
 	//if (cur->next != next)
@@ -481,54 +494,33 @@ bool hashtable::Insert(DPointer<NodeType,8>* head, NodeType* node)
       //      cout << "insert" << endl;
       if (Find(head,key))
     {     
-      //  collisions++;
+      //  this->collisions++;
       result = false;
       break;
     }
     if(saturationmode)
 	{
-	  //  	  char c = getchar();
-	  //	  cout<< "saturation mode" << endl;
-	  //	  coaut << cur.ptr << endl;
-	  //	  cout << prev2.ptr << endl;
 	  /*
-       first = next1;
-       second.ptr = P(first.ptr) + 1;
-       second.count = first.count + 1;
-       if (first.ptr != NULL)
-	 {
-	   cout << "not NULL " << first.ptr <<endl;
-         if (!(P(cur.ptr))->nnext.cas(second,first)){
-	 cout << "cas Failed!"<< endl;
-	 continue;
-       }
-	 }
-       if (Find(head,key))
-    {
-      collisions++;
-      result = false;
-      break;
-    }*/
-	  if (cur.ptr != NULL)
+
+ Hashtable full, delete for every entry 
+	  */	 
+	  if (cur.ptr != NULL)// node belongs in midle of list
 	    {
 	    key1 =(P(cur.ptr))->key;
             Delete(head,key1);
-	      //cout << "deletes: " <<  deletes++;
-	      //cout << "deletes: " <<  deletes++;
-
 
 	    }
-	  else if(prev2.ptr != NULL)
+	  else if(prev2.ptr != NULL)// if statement gaurds against empty list failure
 	    {
 	    key1 =(P(prev2.ptr))->key;
             Delete(head,key1);
-	      //cout <<"deletes: "<< deletes++;
+	      //cout <<"deletes: "<< this->deletes++;
 	    }
 
 	}
        if (Find(head,key))
     {
-      //      collisions++;
+      //      this->collisions++;
       result = false;
       break;
     }
@@ -539,7 +531,7 @@ bool hashtable::Insert(DPointer<NodeType,8>* head, NodeType* node)
   second.count = first.count + 1;
   if ((*prev1).cas(second,first))
     {
-      //      inserts++;
+      //      this->inserts++;
       result = true;
       break;
     }

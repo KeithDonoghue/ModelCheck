@@ -12,6 +12,8 @@ using namespace std;
 #define MARK(p) (unsigned long)(((unsigned long)p) &3)
 
 
+
+// codes for instructions
 #define ADD 0
 #define ADD1 1
 #define ADD2 2
@@ -64,6 +66,15 @@ public:
 
 
 state recurse(state x, int p);
+
+/* 
+
+Define the freelist of nodes to be used as replacement emory management
+
+*/
+
+
+
 class MyFreeList{
 
   NodeType* location;
@@ -96,6 +107,13 @@ public:
 };
 
 
+/*
+
+Define linked list nodes for hashtable buckets
+
+*/
+
+
 class NodeType{
 
 public:
@@ -115,6 +133,9 @@ private:
 };
 
 class hashtable{
+  atomic<int> collisions;
+  atomic<int> inserts;
+  atomic<int> deletes;
   unsigned int hsize;
 thread_local static DPointer<NodeType,8> *prev1;
 thread_local static DPointer<NodeType,8> cur;
@@ -129,7 +150,8 @@ thread_local static DPointer<NodeType,8> second;
 public:
   DPointer<NodeType,8>* table;
   int HashNodeCount();
-  hashtable(unsigned int size);
+  hashtable();
+  void init(unsigned int size);
   bool Find(DPointer<NodeType,8>* head, state key);
   bool Insert(DPointer<NodeType,8>* head, NodeType* node);
   bool  Delete(DPointer<NodeType,8>* head,state key);

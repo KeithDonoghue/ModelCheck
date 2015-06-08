@@ -1,0 +1,23 @@
+#include <atomic>
+#include <iostream>
+#include <chrono>
+#include <random>
+#include <thread>
+#include <queue>
+#include <stack>
+#include <sys/time.h>
+#include <ctime>
+#include "hash8.hpp"
+using namespace std;
+
+
+
+
+class ModelCheck{
+  hashtable t;
+private:
+  int t;
+  atomic<int> collisions;
+  atomic<int> inserts;
+  atomic<int> deletes;
+};

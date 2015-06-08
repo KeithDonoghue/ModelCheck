@@ -1,0 +1,12 @@
+spinrelease2.cpp:29:0: warning: "myfor" redefined [enabled by default]
+ #define myfor 10
+ ^
+In file included from ModelCheck.hpp:10:0,
+                 from spinrelease2.cpp:11:
+hash8.hpp:31:0: note: this is the location of the previous definition
+ #define myfor 12
+ ^
+/tmp/ccs8PrCP.o: In function `main':
+spinrelease2.cpp:(.text+0xe4): undefined reference to `ModelCheck::~ModelCheck()'
+spinrelease2.cpp:(.text+0xf7): undefined reference to `ModelCheck::~ModelCheck()'
+collect2: error: ld returned 1 exit status

@@ -4,7 +4,14 @@
 #include <iostream>
 #include <thread>
 
-template<typename T,unsigned N=sizeof (uint32_t)>
+/*
+ Double pointer required for 
+Atomic compare and swap
+*/
+
+
+
+template<typename T,unsigned N=sizeof (uint32_t)> // 32 bit word machine
 struct DPointer {
 public:
   union {
@@ -42,7 +49,7 @@ public:
 
 
 template<typename T>
-struct DPointer <T,sizeof (uint64_t)> {
+struct DPointer <T,sizeof (uint64_t)> { //64 bit word
 public:
   union {
     uint64_t   ui[2];
